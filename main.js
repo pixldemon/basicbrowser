@@ -6,7 +6,13 @@ let win;
 
 function createWindow() {
 
-	win = new BrowserWindow({width: 800, height: 600, frame: false, transparent: true});
+	win = new BrowserWindow({
+        width: 1200, 
+        height: 900, 
+        frame: false, 
+        transparent: true,
+        nodeIntegration: true
+    });
 	win.loadFile("index.html");
 	
 }

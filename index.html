@@ -24,7 +24,6 @@
 			</div>
 		</div>
 		<div id="content">
-			<webview id="page" src="https://youtube.com"></webview>
 		</div>
 		<script>
 			
@@ -35,6 +34,7 @@
 
 			let UI = {
 			}
+
 			function newTab() {
 				let div = document.createElement("div");
 				div.classList.add("tab");
@@ -44,33 +44,46 @@
 					while(!tab.id.includes("tab")) {
 						tab = tab.parentElement;
 					}
-					focusedTab.classList.remove("tab-current");
-					tab.classList.add("tab-current");
-					focusedTab = tab;
+					selectTab(tab);
 				}
 				document.getElementById("tabs").appendChild(div);
 				div.id = "tab" + tabs.length;
 
 				div.webview = document.createElement("webview");
+				div.webview.src = "google.com";
+				selectTab(div);
+
+				let readyCallback;
+				readyCallback = x => {
+					console.log("callback called");
+					div.webview.loadURL("https://google.com")
+					div.webview.removeEventListener("dom-ready", readyCallback);
+				}
+				div.webview.addEventListener("dom-ready", readyCallback);
 				
 				tabs.push(div);
 
 				return div;
 			}
 			function selectTab(tab) {
-
+				if(focusedTab) {
+					focusedTab.classList.remove("tab-current");
+					UI.content.removeChild(focusedTab.webview);
+				}
+				tab.classList.add("tab-current");
+				UI.content.appendChild(tab.webview);
+				
+				focusedTab = tab;
 			}
 			function init() {
 				
-				focusedTab = newTab();
-				focusedTab.classList.add("tab-current");
 
 				UI.minimizeBtn = document.getElementById("min-btn");
 				UI.maximizeBtn = document.getElementById("max-btn");
 				UI.closeBtn = document.getElementById("close-btn");
 				UI.newTabBtn = document.getElementById("newtab-btn");
 				UI.searchbar = document.getElementById("searchbar");
-				UI.webview = document.getElementById("page");
+				UI.content = document.getElementById("content");
 
 				UI.minimizeBtn.onclick = e => {
 					remote.BrowserWindow.getFocusedWindow().minimize();
@@ -89,13 +102,18 @@
 					console.log(UI.webview);
 					if(e.keyCode == 13) {
 						if(UI.searchbar.value.split(" ").join() == UI.searchbar.value && searchbar.value.split(".").length > 1) {
-							UI.webview.loadURL(UI.searchbar.value);
+							if(!UI.searchbar.value.startsWith("http")) {
+								UI.searchbar.value = "https://" + UI.searchbar.value;
+							}
+							focusedTab.webview.loadURL(UI.searchbar.value);
 						} else {
-							UI.webview.loadURL("https://google.com/search?q=" + UI.searchbar.value);
+							focusedTab.webview.loadURL("https://google.com/search?q=" + UI.searchbar.value);
 						}
 					}
 					
 				}
+
+				focusedTab = newTab();
 			}
 
 			document.onreadystatechange = () => {

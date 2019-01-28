@@ -1,3 +1,5 @@
+/* basic, electron based webbrowser. lightweight, fast and beautiful */
+
 const {app, BrowserWindow} = require("electron");
 
 let win;

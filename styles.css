@@ -1,10 +1,14 @@
 body, html{
+	overflow: disabled;
 	height:100%;
 
 	padding: 0;
 	margin: 0;
 
 	background: none;
+
+	display: flex;
+	flex-direction: column;
 }
 #icon {
 	float:left;
@@ -16,49 +20,89 @@ body, html{
 	border-top-right-radius: 6px;
 	border-top-left-radius: 6px;
 }
-
+#apptop {
+	display: flex;
+	flex-direction: column;
+}
 #titlebar {
 	width: 100%;
 	height:auto;
 	display: inline-block;
-	background-color: #dddddd;
+	background-color: rgb(225, 229, 233);
 	user-select: none;
 	-webkit-app-region: drag;
 }
-#content {
+#navigator {
+	display: flex;
+	flex-direction: row;
+	-webkit-app-region: no-drag;
 	background-color: white;
 }
-
-#newtab-btn {
+#searchbar {
+	overflow: hidden;
+	margin: 8px;
+	padding: 6px;
+	border: none;
+	border-radius: 20px;
+	padding-left: 8px;
+	padding-right: right;
+	background-color: rgb(237, 240, 241);
+	font-family: Tahoma, Geneva, sans-serif;
+}
+#searchbar:focus {
+	outline: none;
+}
+#content {
+	overflow-y: auto;
+	background-color: white;
+	height: calc(100% - 100px);
+}
+webview {
+	width: 100%;
+	height: 100%;
+}
+.basicbrowserbutton {
 	padding: 8px;
 	margin: 4px;
 
 	outline: none;
 	border: none;
-
 	border-radius: 10px;
-
 	background: none;
 
 	-webkit-app-region: no-drag;
 }
-#newtab-btn:hover {
+#newtab-btn {
+	float:left;
+}
+#back-btn {
+	margin-right: 0;
+	padding-right: 4px;
+}
+#forward-btn {
+	margin-left: 0;
+	padding-left: 4px;
+}
+#forward-btn img, #back-btn img {
+	width: 20px;
+}
+.basicbrowserbutton:hover {
 	background-color: lightgrey;
 }
-#newtab-btn img {
+.basicbrowserbutton img {
 	height: 16px;
 	width: 16px;
 }
 .tab {
+	font-family: Tahoma, Geneva, sans-serif;
 	float:left;
 	height: 32px;
-	padding-bottom: 10px;
+	padding-bottom: 8px;
 	margin:0;
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
-	border-radius: 10px;
-	background-color: #dddddd;
-	font-size: 15px;
+	background-color: rgb(225, 229, 233);
+	font-size: 13px;
 
 	-webkit-app-region: no-drag;
 }

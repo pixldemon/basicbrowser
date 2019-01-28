@@ -4,55 +4,98 @@
 		<link rel="stylesheet" href="styles.css">
 	</head>
 	<body>
-		<div id="titlebar">
-			<img id="icon" src="img/icon.png">
-			<div id="tabs">
+		<div id="apptop">
+			<div id="titlebar">
+				<img id="icon" src="img/icon.png">
+				<div id="tabs">
+				</div>
+				<button id="newtab-btn" class="basicbrowserbutton"><img src="img/newtab.png"></button>
+				<div id="titlebar-btns">
+					<button id="min-btn"><img src="img/minimize.png"></button>
+					<button id="max-btn"><img src="img/maximize.png"></button>
+					<button id="close-btn"><img src="img/close.png"></button>
+				</div>
 			</div>
-			<button id="newtab-btn"><img src="newtab.png"></button>
-			<div id="titlebar-btns">
-				<button id="min-btn"><img src="img/minimize.png"></button>
-				<button id="max-btn"><img src="img/maximize.png"></button>
-				<button id="close-btn"><img src="img/close.png"></button>
+			<div id="navigator">
+				<button id="back-btn" class="basicbrowserbutton"><img src="img/arrowleft.png"></button>
+				<button id="forward-btn" class="basicbrowserbutton"><img src="img/arrowright.png"></button>
+				<button id="refresh-btn" class="basicbrowserbutton"><img src="img/refresh.png"></button>
+				<input type="text" placeholder="Search or type URL" id="searchbar" size="100000">
 			</div>
 		</div>
 		<div id="content">
+			<webview id="page" src="https://youtube.com"></webview>
 		</div>
 		<script>
 			
 			let {remote} = require("electron");
+			let focusedTab;
 			let tabs = [];
-			let focusedTab = newTab();
-			focusedTab.classList.add("tab-current");
+			
 
+			let UI = {
+			}
 			function newTab() {
 				let div = document.createElement("div");
 				div.classList.add("tab");
-				div.innerHTML = "<p>New Tab</p>";
+				div.innerHTML = "<p>New Tab lorem ipsum dolor sit amet</p>";
 				div.onclick = e => {
+					let tab = e.target;
+					while(!tab.id.includes("tab")) {
+						tab = tab.parentElement;
+					}
 					focusedTab.classList.remove("tab-current");
-					e.target.classList.add("tab-current");
-					focusedTab = e.target;
+					tab.classList.add("tab-current");
+					focusedTab = tab;
 				}
 				document.getElementById("tabs").appendChild(div);
 				div.id = "tab" + tabs.length;
+
+				div.webview = document.createElement("webview");
+				
 				tabs.push(div);
 
 				return div;
 			}
-			function init() {
+			function selectTab(tab) {
 
-				document.getElementById("min-btn").onclick = e => {
+			}
+			function init() {
+				
+				focusedTab = newTab();
+				focusedTab.classList.add("tab-current");
+
+				UI.minimizeBtn = document.getElementById("min-btn");
+				UI.maximizeBtn = document.getElementById("max-btn");
+				UI.closeBtn = document.getElementById("close-btn");
+				UI.newTabBtn = document.getElementById("newtab-btn");
+				UI.searchbar = document.getElementById("searchbar");
+				UI.webview = document.getElementById("page");
+
+				UI.minimizeBtn.onclick = e => {
 					remote.BrowserWindow.getFocusedWindow().minimize();
 				}
-				document.getElementById("max-btn").onclick = e => {
+				UI.maximizeBtn.onclick = e => {
 					remote.BrowserWindow.getFocusedWindow().isMaximized() ? 
 						remote.BrowserWindow.getFocusedWindow().unmaximize() : 
 						remote.BrowserWindow.getFocusedWindow().maximize();
 				}
-				document.getElementById("close-btn").onclick = e => {
+				UI.closeBtn.onclick = e => {
 					remote.BrowserWindow.getFocusedWindow().close();
 				}
-				document.getElementById("newtab-btn").onclick = newTab;
+
+				UI.newTabBtn.onclick = newTab;
+				UI.searchbar.onkeydown = e => {
+					console.log(UI.webview);
+					if(e.keyCode == 13) {
+						if(UI.searchbar.value.split(" ").join() == UI.searchbar.value && searchbar.value.split(".").length > 1) {
+							UI.webview.loadURL(UI.searchbar.value);
+						} else {
+							UI.webview.loadURL("https://google.com/search?q=" + UI.searchbar.value);
+						}
+					}
+					
+				}
 			}
 
 			document.onreadystatechange = () => {

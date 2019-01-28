@@ -1,0 +1,66 @@
+<html>
+	<head>
+		<title>BasicBrowser</title>
+		<link rel="stylesheet" href="styles.css">
+	</head>
+	<body>
+		<div id="titlebar">
+			<img id="icon" src="img/icon.png">
+			<div id="tabs">
+			</div>
+			<button id="newtab-btn"><img src="newtab.png"></button>
+			<div id="titlebar-btns">
+				<button id="min-btn"><img src="img/minimize.png"></button>
+				<button id="max-btn"><img src="img/maximize.png"></button>
+				<button id="close-btn"><img src="img/close.png"></button>
+			</div>
+		</div>
+		<div id="content">
+		</div>
+		<script>
+			
+			let {remote} = require("electron");
+			let tabs = [];
+			let focusedTab = newTab();
+			focusedTab.classList.add("tab-current");
+
+			function newTab() {
+				let div = document.createElement("div");
+				div.classList.add("tab");
+				div.innerHTML = "<p>New Tab</p>";
+				div.onclick = e => {
+					focusedTab.classList.remove("tab-current");
+					e.target.classList.add("tab-current");
+					focusedTab = e.target;
+				}
+				document.getElementById("tabs").appendChild(div);
+				div.id = "tab" + tabs.length;
+				tabs.push(div);
+
+				return div;
+			}
+			function init() {
+
+				document.getElementById("min-btn").onclick = e => {
+					remote.BrowserWindow.getFocusedWindow().minimize();
+				}
+				document.getElementById("max-btn").onclick = e => {
+					remote.BrowserWindow.getFocusedWindow().isMaximized() ? 
+						remote.BrowserWindow.getFocusedWindow().unmaximize() : 
+						remote.BrowserWindow.getFocusedWindow().maximize();
+				}
+				document.getElementById("close-btn").onclick = e => {
+					remote.BrowserWindow.getFocusedWindow().close();
+				}
+				document.getElementById("newtab-btn").onclick = newTab;
+			}
+
+			document.onreadystatechange = () => {
+				if(document.readyState == "complete") {
+					init();
+				}
+			}
+
+		</script>
+	</body>
+</html>

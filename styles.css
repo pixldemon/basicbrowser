@@ -1,0 +1,111 @@
+body, html{
+	height:100%;
+
+	padding: 0;
+	margin: 0;
+
+	background: none;
+}
+#icon {
+	float:left;
+	height: 20px;
+	padding: 6px;
+	margin: 4px;
+}
+#titlebar, #titlebar-btns {
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+}
+
+#titlebar {
+	width: 100%;
+	height:auto;
+	display: inline-block;
+	background-color: #dddddd;
+	user-select: none;
+	-webkit-app-region: drag;
+}
+#content {
+	background-color: white;
+}
+
+#newtab-btn {
+	padding: 8px;
+	margin: 4px;
+
+	outline: none;
+	border: none;
+
+	border-radius: 10px;
+
+	background: none;
+
+	-webkit-app-region: no-drag;
+}
+#newtab-btn:hover {
+	background-color: lightgrey;
+}
+#newtab-btn img {
+	height: 16px;
+	width: 16px;
+}
+.tab {
+	float:left;
+	height: 32px;
+	padding-bottom: 10px;
+	margin:0;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-radius: 10px;
+	background-color: #dddddd;
+	font-size: 15px;
+
+	-webkit-app-region: no-drag;
+}
+.tab p {
+	padding: 0 10px;
+}
+.tab-current {
+	background-color: white !important;
+}
+
+
+#titlebar-btns {
+	padding:10px;
+	float: right;
+	-webkit-app-region: no-drag;
+}
+#titlebar-btns button {
+	width: 20px;
+	height: 20px;
+	outline: none;
+	border: none;
+
+	padding: 3px;
+	margin: 0;
+
+	border-radius: 50%;
+
+}
+#titlebar-btns button img {
+	float:center;
+
+	height:12px;
+	width:12px;
+
+	visibility: hidden;
+	opacity: 0.5;
+}
+#titlebar-btns button:hover img {
+	visibility: visible;
+}
+
+#min-btn {
+	background-color: yellow;
+}
+#max-btn {
+	background-color: lightgreen;
+}
+#close-btn {
+	background-color: lightcoral;
+} 

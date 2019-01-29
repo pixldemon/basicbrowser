@@ -44,8 +44,8 @@ body, html{
 	padding: 6px;
 	border: none;
 	border-radius: 20px;
-	padding-left: 8px;
-	padding-right: right;
+	padding-left: 12px;
+	padding-right: 12px;
 	background-color: rgb(237, 240, 241);
 	font-family: Tahoma, Geneva, sans-serif;
 }
@@ -105,6 +105,7 @@ webview {
 	border-top-right-radius: 10px;
 	background-color: rgb(225, 229, 233);
 	font-size: 13px;
+	overflow: disabled;
 
 	-webkit-app-region: no-drag;
 }
@@ -154,4 +155,4 @@ webview {
 }
 #close-btn {
 	background-color: lightcoral;
-} 
+}

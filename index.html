@@ -38,7 +38,7 @@
 			function newTab() {
 				let div = document.createElement("div");
 				div.classList.add("tab");
-				div.innerHTML = "<p>New Tab lorem ipsum dolor sit amet</p>";
+				div.innerHTML = "<p>New Tab</p>";
 				div.onclick = e => {
 					let tab = e.target;
 					while(!tab.id.includes("tab")) {
@@ -51,27 +51,36 @@
 
 				div.webview = document.createElement("webview");
 				div.webview.src = "google.com";
-				selectTab(div);
+
+				UI.content.appendChild(div.webview);
 
 				let readyCallback;
 				readyCallback = x => {
 					console.log("callback called");
 					div.webview.loadURL("https://google.com")
 					div.webview.removeEventListener("dom-ready", readyCallback);
+					selectTab(div);
 				}
 				div.webview.addEventListener("dom-ready", readyCallback);
+				div.webview.addEventListener("did-finish-load", e => {
+					let title = div.webview.getTitle();
+					title = (title.length > 25 ? title.substring(0, 25) + "..." : title);
+					div.innerHTML = "<p>" + title + "</p>";
+					searchbar.value = div.webview.getURL();
+				});
 				
 				tabs.push(div);
 
 				return div;
 			}
 			function selectTab(tab) {
+
 				if(focusedTab) {
 					focusedTab.classList.remove("tab-current");
-					UI.content.removeChild(focusedTab.webview);
+					focusedTab.webview.style.display = "none";
 				}
 				tab.classList.add("tab-current");
-				UI.content.appendChild(tab.webview);
+				tab.webview.style.display = "";
 				
 				focusedTab = tab;
 			}
@@ -84,6 +93,9 @@
 				UI.newTabBtn = document.getElementById("newtab-btn");
 				UI.searchbar = document.getElementById("searchbar");
 				UI.content = document.getElementById("content");
+				UI.refreshBtn = document.getElementById("refresh-btn");
+				UI.backBtn = document.getElementById("back-btn");
+				UI.forwardBtn = document.getElementById("forward-btn");
 
 				UI.minimizeBtn.onclick = e => {
 					remote.BrowserWindow.getFocusedWindow().minimize();
@@ -96,10 +108,18 @@
 				UI.closeBtn.onclick = e => {
 					remote.BrowserWindow.getFocusedWindow().close();
 				}
+				UI.refreshBtn.onclick = e => {
+					focusedTab.webview.reload();
+				}
+				UI.backBtn.onclick = e => {
+					focusedTab.webview.goBack();
+				}
+				UI.forwardBtn.onclick = e => {
+					focusedTab.webview.goForward();
+				}
 
 				UI.newTabBtn.onclick = newTab;
 				UI.searchbar.onkeydown = e => {
-					console.log(UI.webview);
 					if(e.keyCode == 13) {
 						if(UI.searchbar.value.split(" ").join() == UI.searchbar.value && searchbar.value.split(".").length > 1) {
 							if(!UI.searchbar.value.startsWith("http")) {
